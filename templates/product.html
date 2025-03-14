@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Motos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<style>
+    .card-img-top {
+    width: 100%;
+    height: 180px; /* Altura fija para todas las imágenes */
+    object-fit: cover; /* Recorta de forma proporcional */
+    border-radius: 12px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Animación suave al pasar el mouse */
+}
+
+/* Efecto al pasar el mouse */
+.card-img-top:hover {
+    transform: scale(1.05); /* Ligeramente más grande */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Más sombra al pasar el mouse */
+}
+
+/* Ajustes generales para que las cards no se distorsionen */
+.card {
+    height: 420px; /* Altura fija para todas las cards */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 15px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+</style>
+<body>
+    
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🏍️ MotoStore</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <button id="darkModeToggle" class="btn btn-outline-light ms-2">🌙</button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    {% if session.get('admin') %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('admin') }}">Panel Admin</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout') }}">Cerrar Sesión</a></li>
+                {% elif session.get('user_name') %}
+                    <li class="nav-item"><a class="nav-link">Hola, {{ session['user_name'] }}</a></li>
+                    <li class="nav-item"><a class="nav-link text-danger" href="{{ url_for('logout_usuario') }}">Cerrar Sesión</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('login_usuario') }}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Registrarse</a></li>
+                {% endif %}
+                    <li class="nav-item"><a class="nav-link active" href="/">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/favorites">Favoritos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacto">Contacto</a></li>
+                    <a class="nav-link" href="{{ url_for('ver_carrito') }}">
+                        🛒 Carrito
+                        {% if session.get('carrito') %}
+                            <span class="badge bg-danger">{{ session['carrito']|length }}</span>
+                        {% endif %}
+                    </a>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Catálogo de Motos</h1>
+
+        <!-- Barra de búsqueda con autocompletar -->
+        <form method="get" action="/product" class="input-group mb-4 position-relative">
+            <input type="text" name="q" id="searchInput" class="form-control" placeholder="Buscar motos..." autocomplete="off" value="{{ request.args.get('q', '') }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <div id="suggestions" class="list-group position-absolute w-100" style="z-index: 1000;"></div>
+        </form>
+
+        <!-- Formulario de Comparación -->
+        <form method="POST" action="{{ url_for('compare') }}" id="compareForm">
+            <div class="row">
+                {% if motos %}
+                    {% for moto in motos %}
+                    <div class="col-md-4 card-moto" data-aos="fade-up" data-aos-delay="100">
+                        <div class="card mb-4 shadow-sm position-relative">
+
+                            <!-- Corazón de favoritos -->
+                            <a href="{{ url_for('toggle_favorite', moto_id=moto.id) }}" class="favorite-icon" title="Agregar/Quitar Favorito">
+                                {% if moto.id in session.get('favoritos', []) %}
+                                    ❤️
+                                {% else %}
+                                    🤍
+                                {% endif %}
+                            </a>
+
+                            <!-- Imagen -->
+                            <img src="{{ url_for('static', filename='images/' + moto.imagen) }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+
+                            <div class="card-body">
+                                <!-- Descuento -->
+{% set fecha_actual = fecha_actual %}
+{% if moto.descuento > 0 and moto.descuento_hasta and moto.descuento_hasta >= fecha_actual %}
+    <p class="card-text">
+        <span class="text-danger fw-bold">${{ (moto.precio - (moto.precio * moto.descuento / 100)) | round(2) }}</span>
+        <small class="text-muted text-decoration-line-through">${{ moto.precio }}</small>
+    </p>
+    <span class="badge bg-danger">🔥 {{ moto.descuento }}% OFF hasta {{ moto.descuento_hasta }}</span>
+{% else %}
+    <p class="card-text">${{ moto.precio }}</p>
+{% endif %}
+                                <h5 class="card-title">{{ moto.nombre }}</h5>
+                                <p class="card-text">${{ moto.precio }}</p>
+
+                                <!-- Checkbox para comparar -->
+                                <div class="form-check">
+                                    <input class="form-check-input compare-checkbox" type="checkbox" name="compare" value="{{ moto.id }}">
+                                    <label class="form-check-label small">Comparar</label>
+                                </div>
+
+                                <!-- Botones -->
+                                <div class="d-flex justify-content-between mt-3">
+                                    <!-- Botón Ver Detalles -->
+<a href="{{ url_for('product_detail', moto_id=moto.id) }}" 
+class="btn btn-outline-primary btn-sm mt-auto w-100 mb-2">
+<i class="bi bi-info-circle-fill"></i> Ver Detalles
+</a>
+
+<!-- Botón Agendar Cita -->
+<a href="{{ url_for('agendar_cita', moto_id=moto.id) }}" 
+class="btn btn-outline-success btn-sm mt-auto w-100">
+<i class="bi bi-calendar-check-fill"></i> Agendar Cita
+</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center mt-5">No se encontraron motos con ese criterio de búsqueda.</p>
+                {% endif %}
+            </div>
+        </form>
+
+        <!-- Botón Mostrar más -->
+        <button id="loadMore" class="btn btn-outline-primary mt-4 mx-auto d-block">Mostrar más motos</button>
+    </div>
+
+    <!-- Alerta flotante de comparación -->
+    <div id="compareAlert" class="alert alert-warning alert-dismissible fade show fixed-bottom m-4 shadow" role="alert" style="display: none;">
+        <strong>¿Quieres comparar estas motos?</strong>
+        <button type="submit" form="compareForm" class="btn btn-sm btn-primary">Comparar</button>
+        <button type="button" class="btn btn-sm btn-danger" id="cancelCompare">Cancelar</button>
+    </div>
+
+    <!-- WhatsApp flotante -->
+    <a href="https://wa.me/573233638739" target="_blank" class="btn btn-success rounded-circle shadow" style="position: fixed; bottom: 20px; right: 20px; padding: 15px; font-size: 24px;">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkboxes = document.querySelectorAll('.compare-checkbox');
+        const alertBox = document.getElementById('compareAlert');
+        const cancelBtn = document.getElementById('cancelCompare');
+        const input = document.getElementById('searchInput');
+        const suggestions = document.getElementById('suggestions');
+
+        // Comparar motos
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                const checked = document.querySelectorAll('.compare-checkbox:checked');
+                alertBox.style.display = checked.length >= 2 ? 'block' : 'none';
+            });
+        });
+        cancelBtn.addEventListener('click', function() {
+            document.querySelectorAll('.compare-checkbox:checked').forEach(chk => chk.checked = false);
+            alertBox.style.display = 'none';
+        });
+
+        // Dark Mode
+        const toggle = document.getElementById('darkModeToggle');
+        if (localStorage.getItem('dark-mode') === 'enabled') document.body.classList.add('dark-mode');
+        toggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('dark-mode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+        });
+
+        // AOS
+        AOS.init();
+
+        // Búsqueda predictiva
+        input.addEventListener('input', function() {
+            const query = input.value;
+            if (query.length > 1) {
+                fetch(`/search_autocomplete?q=${query}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        suggestions.innerHTML = '';
+                        data.length === 0 ? suggestions.innerHTML = '<div class="list-group-item">No encontrado</div>' :
+                        data.forEach(function(item) {
+                            const option = document.createElement('div');
+                            option.textContent = item;
+                            option.classList.add('list-group-item', 'list-group-item-action');
+                            option.style.cursor = 'pointer';
+                            option.onclick = function() { input.value = item; suggestions.innerHTML = ''; };
+                            suggestions.appendChild(option);
+                        });
+                    });
+            } else suggestions.innerHTML = '';
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !suggestions.contains(e.target)) suggestions.innerHTML = '';
+        });
+
+        // Mostrar más motos
+        const cards = document.querySelectorAll('.card-moto');
+        let visible = 6;
+        function showMotos() { cards.forEach((c, i) => c.style.display = i < visible ? 'block' : 'none'); }
+        document.getElementById('loadMore').addEventListener('click', () => { visible += 3; showMotos(); });
+        showMotos();
+    });
+    </script>
+</body>
+</html>

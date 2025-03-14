@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Moto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+   <!-- NAVBAR -->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">🏍️ MotoStore Admin</a>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="btn btn-danger me-2" href="{{ url_for('logout') }}">Salir</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-info ms-2">📊 Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Editar Información de la Moto</h2>
+    
+    <form method="POST" class="shadow p-4 rounded bg-light">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" class="form-control" value="{{ moto.nombre }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="precio" class="form-label">Precio:</label>
+            <input type="number" name="precio" id="precio" class="form-control" value="{{ moto.precio }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen (Nombre del archivo):</label>
+            <input type="text" name="imagen" id="imagen" class="form-control" value="{{ moto.imagen }}" required>
+        </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción:</label>
+            <textarea name="descripcion" id="descripcion" class="form-control" rows="4" required>{{ moto.descripcion }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Actualizar Moto</button>
+    </form>
+</div>
+
+</body>
+</html>

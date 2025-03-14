@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Agendamientos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- NAVBAR -->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">🏍️ MotoStore Admin</a>
+        <div class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="btn btn-danger me-2" href="{{ url_for('admin') }}">Salir</a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-info ms-2">📊 Dashboard</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">📅 Historial de Agendamientos</h1>
+
+        <div class="container mt-5">
+            <h1 class="text-center">Historial de Agendamientos</h1>
+        
+            {% if historial %}
+                <table class="table table-bordered mt-4 shadow">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                            <th>Fecha</th>
+                            <th>¿Tiene RUNT?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cita in historial %}
+                        <tr>
+                            <td>{{ cita.nombre }}</td>
+                            <td>{{ cita.email }}</td>
+                            <td>{{ cita.telefono }}</td>
+                            <td>{{ cita.fecha }}</td>
+                            <td>{{ cita.runt }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        
+                <!-- Botón de Eliminar Historial -->
+                <form method="POST" action="{{ url_for('delete_historial_moto', moto_id=historial[0].moto_id) }}" onsubmit="return confirmarEliminacion();">
+                    <button type="submit" class="btn btn-danger w-100 shadow-lg">
+                        🗑️ Eliminar Historial Completo
+                    </button>
+                </form>
+        
+            {% else %}
+                <p class="text-center mt-4 alert alert-info shadow">No hay historial para esta moto.</p>
+            {% endif %}
+        </div>
+        
+        <!-- Script Confirmación -->
+        <script>
+        function confirmarEliminacion() {
+            return confirm('⚠️ ¿Estás seguro de eliminar todo el historial? Esta acción no se puede deshacer.');
+        }
+        </script>
+</html>
