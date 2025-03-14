@@ -1,0 +1,400 @@
+
+body { background-color: #f8f9fa; }
+.card { box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s; }
+.card:hover { transform: scale(1.05); }
+
+/* Estilo general para móviles */
+@media (max-width: 768px) {
+  .card-moto {
+      margin-bottom: 20px;
+  }
+
+  .card-img-top {
+      height: 180px;
+      object-fit: cover;
+  }
+
+  .navbar {
+      padding: 0.5rem 1rem;
+  }
+
+  .btn {
+      font-size: 14px;
+      padding: 10px 15px;
+  }
+
+  h1, h2, h3 {
+      font-size: 1.5rem;
+  }
+}
+
+/* Estilo general para pantallas grandes */
+@media (min-width: 769px) {
+  .card-img-top {
+      height: 250px;
+      object-fit: cover;
+  }
+}
+
+/* Estilos para navbar */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+  
+  .nav-link {
+    transition: all 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: #f39c12 !important;
+    transform: scale(1.1);
+  }
+  
+  /* Footer */
+  footer {
+    margin-top: 50px;
+  }
+  
+  footer a {
+    transition: all 0.3s ease;
+  }
+  
+  footer a:hover {
+    color: #f39c12 !important;
+    transform: scale(1.2);
+  }
+  
+  .btn-danger {
+    font-weight: bold;
+    padding: 8px 16px;
+    transition: all 0.3s;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+    transform: scale(1.05);
+  }
+
+  /* ====== Formulario de Contacto ====== */
+
+.contact-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .contact-container:hover {
+    transform: scale(1.01);
+  }
+  
+  .contact-title {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .contact-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+    font-size: 1rem;
+  }
+  
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  .contact-form textarea {
+    resize: none;
+    height: 150px;
+  }
+  
+  .contact-form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .contact-form button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+  }
+  
+  /* Mensaje de éxito */
+  .contact-success {
+    text-align: center;
+    font-size: 1.2rem;
+    color: green;
+    margin-bottom: 20px;
+    font-weight: bold;
+  }
+
+  .btn-notificaciones {
+    font-size: 1.8rem;
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 10px;
+    position: relative;
+  }
+  
+  .btn-notificaciones:hover {
+    color: #0056b3;
+  }
+  
+  .badge {
+    font-size: 0.8rem;
+  }
+  
+  /* ==== Contenedor de Notificaciones ==== */
+.notificaciones-container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+  }
+  
+  /* ==== Tarjeta de Notificación ==== */
+  .notificacion-card {
+    background: #f8f9fa;
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .notificacion-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  }
+  
+  /* ==== Título Moto ==== */
+  .notificacion-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  /* ==== Texto detalles ==== */
+  .notificacion-text {
+    font-size: 1rem;
+    margin-bottom: 5px;
+  }
+  
+  /* ==== Botón de Marcar como leídas ==== */
+  .btn-marcar-leido {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #dc3545;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    margin-bottom: 20px;
+  }
+  
+  .btn-marcar-leido:hover {
+    background: #c82333;
+    transform: scale(1.05);
+  }
+  
+  /* ==== Mensaje sin notificaciones ==== */
+  .sin-notificaciones {
+    text-align: center;
+    font-size: 1.2rem;
+    color: gray;
+    margin-top: 50px;
+  }
+  
+  /* ==== Badge de nuevo ==== */
+  .badge-nuevo {
+    background: #28a745;
+    color: white;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+    border-radius: 8px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+  
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+  
+  .btn {
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .badge {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .btn-secondary {
+    font-size: 0.8rem;
+    padding: 5px 8px;
+    border-radius: 8px;
+  }
+  
+
+  /* Barra de búsqueda personalizada */
+form.d-flex input.form-control {
+    border-radius: 30px;
+    padding: 10px 20px;
+}
+
+form.d-flex button.btn {
+    border-radius: 30px;
+}
+  
+
+
+
+
+/* Ícono de favoritos (corazón) */
+.favorite-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    text-decoration: none;
+    z-index: 10;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* Efecto al pasar el mouse */
+.favorite-icon:hover {
+    transform: scale(1.2);
+    color: red;
+}
+
+/* Tabla de comparación */
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table img {
+    max-width: 100px;
+    height: auto;
+}
+
+/* Alerta flotante para comparar */
+#compareAlert {
+    right: 20px;
+    left: auto;
+    width: auto;
+    max-width: 400px;
+    z-index: 1050;
+}
+
+/* Botones dentro de la alerta */
+#compareAlert .btn {
+    margin-left: 10px;
+}
+
+
+/* DARK MODE */
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+body.dark-mode .card {
+    background-color: #1f1f1f;
+    color: white;
+}
+
+body.dark-mode .navbar, body.dark-mode .footer {
+    background-color: #222;
+}
+
+body.dark-mode .btn-primary {
+    background-color: #444;
+    border-color: #555;
+}
+
+#suggestions {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 0 0 5px 5px;
+}
+
+.list-group-item-action:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+
+/* Botones de descarga */
+.btn-download {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background: white;
+}
+
+.btn-download:hover {
+    background: #f8f9fa;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+}
+
+.btn-download i {
+    transition: transform 0.3s ease;
+}
+
+.btn-download:hover i {
+    transform: scale(1.2);
+}
+
+.btn-download span {
+    font-size: 1rem;
+}
+
+

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Motos Favoritas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">🏍️ MotoStore</a>
+            <div class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="/">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/favorites">Favoritos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/contacto">Contacto</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/product">Salir</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">❤️ Mis Motos Favoritas</h1>
+
+        {% if motos %}
+        <div class="row">
+            {% for moto in motos %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="{{ url_for('static', filename='images/' + moto.imagen) }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ moto.nombre }}</h5>
+                        <p class="card-text">${{ moto.precio }}</p>
+                        <a href="{{ url_for('product_detail', moto_id=moto.id) }}" class="btn btn-primary btn-sm">Ver Detalles</a>
+                        <a href="{{ url_for('schedule_appointment', moto_id=moto.id) }}" class="btn btn-success btn-sm">Agendar Cita</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center mt-5">No has agregado ninguna moto a favoritos aún.</p>
+        {% endif %}
+    </div>
+
+  <!-- WhatsApp flotante -->
+  <a href="https://wa.me/573233638739" target="_blank" class="btn btn-success rounded-circle shadow" style="position: fixed; bottom: 20px; right: 20px; padding: 15px; font-size: 24px;">
+    <i class="bi bi-whatsapp"></i>
+</a>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
